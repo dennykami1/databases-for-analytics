@@ -1,6 +1,6 @@
 # Exercise 01: World Database SQL Practice
 
-- Name:
+- Name: Kami Denny
 - Course: Database for Analytics
 - Module: 1
 - Database Used: World Database
@@ -35,7 +35,7 @@ Why were these data types selected?
 
 ### Answer
 
-_Write your explanation here._
+Data type for `country.Population` is int and `country.LifeExpectancy`is decimal(3,1). Population will be Whole numbers and large values. Population as a Integer allows for efficient storage and mathematical operations. DECIMAL(3,1) stores values with exact precision.It allows three total digits with one after the decimal point. Life Expectancy is a statistical average and will require decimal precision.
 
 ### Screenshot
 
@@ -56,7 +56,7 @@ Why do you think this data type was selected?
 
 ### Answer
 
-_Write your explanation here._
+`country.IndepYear`is a small integer or smallint. The small integer data type was likely chosen due to being numeric and relatively small. Small Integer provides a large enough range to encompass all potential indepence year values.
 
 ### Screenshot
 
@@ -75,7 +75,7 @@ Explain why your proposed data type might be better in some situations.
 
 ### Answer
 
-_Write your explanation here._
+'Small Integer Unsigned' is a strong alternative because it reflects the positive data of independence years. It prevents invalid negative values, supports a wider positive range, and maintains efficient storage. This makes it a more precise and safer choice for this type of historical data.
 
 ---
 
@@ -159,9 +159,17 @@ Write a SQL command to **update the city named `"Nashville-Davidson"` to `"Nashv
 ### SQL
 
 ```sql
+SELECT ID, Name
+FROM city
+WHERE Name = 'Nashville-Davidson';
+
 UPDATE city
 SET Name = 'Nashville'
-WHERE Name = 'Nashville-Davidson';
+WHERE ID = 3814;
+
+SELECT ID, Name
+FROM city
+WHERE Name = 'Nashville';
 ```
 
 ### Screenshot
@@ -181,6 +189,10 @@ Use reasonable values for the remaining columns.
 ```sql
 INSERT INTO country (Code, Name, Continent, Region, Population)
 VALUES ('NAR', 'Narnia', 'Europe', 'Fantasy', 1000000);
+
+SELECT *
+FROM country
+WHERE Code = 'NAR'
 ```
 
 ### Screenshot

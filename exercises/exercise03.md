@@ -1,6 +1,5 @@
 # Exercise 03: MongoDB – Document Queries and Analysis
-
-- Name:
+- Name: Kami Denny
 - Course: Database for Analytics
 - Module: 3
 - Database Used: MongoDB
@@ -26,14 +25,14 @@ When importing the documents from `restaurants-json.json`,
 
 ### Answer
 
-_Write the number of documents imported._
+25358
 
 ### Screenshot
 
 _Show evidence of how you determined this (for example, a count query)._
 
 ```javascript
-// Your MongoDB command here
+// db["44661"].countDocuments()
 ```
 
 ![Q1 Screenshot](screenshots/q1_document_count.png)
@@ -49,7 +48,7 @@ Before writing queries on the data,
 ### MongoDB Command
 
 ```javascript
-// Your MongoDB command here
+// use Databases44661
 ```
 
 ### Screenshot
@@ -67,7 +66,7 @@ write the MongoDB query needed to
 ### MongoDB Query
 
 ```javascript
-// Your MongoDB query here
+// db.Restaurants.find({ borough: "Queens" })
 ```
 
 ### Screenshot
@@ -85,8 +84,12 @@ write the MongoDB query needed to
 ### MongoDB Query
 
 ```javascript
-// Your MongoDB query here
+// db.Restaurants.countDocuments({ borough: "Queens" })
 ```
+
+### Answer
+
+5656
 
 ### Screenshot
 
@@ -104,7 +107,7 @@ write the MongoDB query needed to
 ### MongoDB Query
 
 ```javascript
-// Your MongoDB query here
+// db.Restaurants.countDocuments({ borough: "Queens", cuisine: "Hamburgers" })
 ```
 
 ### Screenshot
@@ -124,7 +127,7 @@ _Hint: Look up how to query **embedded documents**._
 ### MongoDB Query
 
 ```javascript
-// Your MongoDB query here
+// db.Restaurants.countDocuments({ "address.zipcode": "10460" })
 ```
 
 ### Screenshot
@@ -155,7 +158,7 @@ Your output should resemble:
 ### MongoDB Query
 
 ```javascript
-// Your MongoDB query here
+// db.Restaurants.find({ "address.zipcode": "10460" },{ name: 1, _id: 0 })
 ```
 
 ### Screenshot
@@ -179,9 +182,9 @@ Your results should include:
 ### MongoDB Query
 
 ```javascript
-// Your MongoDB query here
+// db.Restaurants.find({ name: { $regex: "IHOP", $options: "i" } },{ name: 1, _id: 0 }
 ```
 
 ### Screenshot
 
-![Q8 Screenshot](screenshots/q8_ihop_case_insensitive.png)
+![Q8 Screenshot](screenshots/q8_ihop_Ihop.png)

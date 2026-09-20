@@ -1,8 +1,8 @@
 # Exercise 04: Advanced SQL, Jupyter, and Visualization
 
-- Name:
+- Name: Kami Denny
 - Course: Database for Analytics
-- Module:
+- Module: 4
 - Database Used: World Database
 - Tools Used: PostgreSQL, SQLAlchemy, Pandas, Jupyter Notebooks
 
@@ -34,7 +34,13 @@ along with the **number of official languages spoken**.
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT country.name as country, COUNT(countrylanguage.language) as language_count
+FROM country
+JOIN countrylanguage ON country.code=countrylanguage.countrycode
+WHERE countrylanguage.isofficial = 'T'
+GROUP BY country.name
+HAVING COUNT(countrylanguage.language) > 2
+ORDER BY language_count DESC
 ```
 
 ### Screenshot
@@ -56,7 +62,11 @@ execute the query from Question 1 and
 ### Python Code
 
 ```python
-# Your three Python statements here
+engine = create_engine(connection_url)
+
+connection = engine.connect()
+
+result = connection.execute(text(sql_query))
 ```
 
 ### Screenshot
@@ -77,7 +87,16 @@ to produce the following graph:
 ### Python Code
 
 ```python
-# Your Python code here
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12,6))
+plt.bar(df['country'], df['language_count'])
+plt.xticks(rotation=90)
+plt.xlabel("Country")
+plt.ylabel("Number of Official Languages")
+plt.title("Official Languages per Country (World Database)")
+plt.tight_layout()
+plt.show()
 ```
 
 ### Screenshot

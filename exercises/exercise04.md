@@ -62,11 +62,32 @@ execute the query from Question 1 and
 ### Python Code
 
 ```python
+import pandas as pd
+from sqlalchemy import create_engine, text
+
+password = "kamidenny"
+
+connection_url = f"postgresql+psycopg2://postgres:{password}@localhost:5432/world"
+
 engine = create_engine(connection_url)
 
 connection = engine.connect()
 
+sql_query = """
+SELECT country.name AS country,
+       COUNT(countrylanguage.language) AS language_count
+FROM country
+JOIN countrylanguage
+    ON country.code = countrylanguage.countrycode
+WHERE countrylanguage.isofficial = 'T'
+GROUP BY country.name
+HAVING COUNT(countrylanguage.language) > 2
+ORDER BY language_count DESC;
+"""
+
 result = connection.execute(text(sql_query))
+df = pd.DataFrame(result.mappings().all())
+print(df)
 ```
 
 ### Screenshot

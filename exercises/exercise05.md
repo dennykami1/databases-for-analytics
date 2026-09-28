@@ -1,10 +1,10 @@
 # Exercise 05: SQLDA Database - Dates, Data Quality, Arrays, and JSON
 
-- Name:
+- Name: Kami Denny
 - Course: Database for Analytics
-- Module:
+- Module: 5
 - Database Used: `sqlda` (Sample Datasets)
-- Tools Used: PostgreSQL (pgAdmin or psql)
+- Tools Used: PostgreSQL (pgAdmin)
 
 ---
 
@@ -43,7 +43,9 @@ year
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT DISTINCT EXTRACT(YEAR FROM sent_date) AS year
+FROM emails
+ORDER BY year
 ```
 
 ### Screenshot
@@ -68,7 +70,12 @@ count   year
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT
+    COUNT(*) AS count,
+    EXTRACT(YEAR FROM sent_date) AS year
+FROM emails
+GROUP BY year
+ORDER BY year
 ```
 
 ### Screenshot
@@ -90,7 +97,9 @@ Only include emails that contain **both** a sent date and an opened date.
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT sent_date, opened_date, opened_date - sent_date AS interval
+FROM emails
+WHERE sent_date IS NOT NULL AND opened_date IS NOT NULL
 ```
 
 ### Screenshot
@@ -108,7 +117,9 @@ show emails that contain an **opened date BEFORE the sent date**.
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT sent_date, opened_date
+FROM emails
+WHERE opened_date < sent_date
 ```
 
 ### Screenshot
@@ -127,11 +138,11 @@ After looking at the data, **why is this the case?**
 
 ### Answer
 
-_Write your explanation here._
+After examining the data, I noticed that all 109 problematic records have a sent_date timestamp of exactly 15:00:00. It’s unlikely that this many emails were truly sent at the same exact time. This indicates that the sent_date values were added later using a default time during data import or cleanup. Because the opened_date values reflect the actual time the emails were opened, many of them appear to occur before the artificially assigned sent_date, creating the incorrect ordering.
 
 ### Screenshot (if requested by instructor)
 
-![Q5 Screenshot](screenshots/q5_explain_date_issue.png)
+![Q5 Screenshot](screenshots/q4_opened_before_sent.png)
 
 ---
 
@@ -168,7 +179,7 @@ CREATE TEMP TABLE customer_dealership_distance AS (
 
 ### Answer
 
-_Write your explanation here._
+A temporary table named customer_points is created and filled with each customer’s ID along with a geographic point built from their latitude and longitude. A second temporary table, dealership_points, stores the same type of point data for each dealership along with its ID. The final temporary table combines both sets of points and calculates the straight‑line distance between every customer and every dealership, producing a table of customer IDs, dealership IDs, and the distance between them.
 
 ---
 
@@ -188,7 +199,11 @@ For example - dealership 1 is below:
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT dealership_id,
+ARRAY_AGG(last_name || ',' || first_name ORDER BY last_name, first_name) AS salespeople
+FROM salespeople
+GROUP BY dealership_id
+ORDER BY dealership_id
 ```
 
 ### Screenshot
@@ -214,7 +229,14 @@ Reference image:
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT dealerships.state, dealerships.dealership_id, COUNT(*) AS salesperson_count,
+ARRAY_AGG(salespeople.last_name || ',' || salespeople.first_name
+ORDER BY salespeople.last_name, salespeople.first_name) AS salespeople
+FROM dealerships
+JOIN salespeople
+ON dealerships.dealership_id = salespeople.dealership_id
+GROUP BY dealerships.state, dealerships.dealership_id
+ORDER BY dealerships.state, dealerships.dealership_id
 ```
 
 ### Screenshot
@@ -231,7 +253,8 @@ the **customers** table to **JSON**.
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT row_to_json(customers)
+FROM customers
 ```
 
 ### Screenshot
@@ -258,9 +281,21 @@ Reference image:
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT json_agg(result)
+FROM (
+SELECT dealerships.state, dealerships.dealership_id,
+COUNT(*) AS salesperson_count,
+ARRAY_AGG(salespeople.last_name || ',' || salespeople.first_name
+ORDER BY salespeople.last_name, salespeople.first_name) AS salespeople
+FROM dealerships
+JOIN salespeople
+ON dealerships.dealership_id = salespeople.dealership_id
+GROUP BY dealerships.state, dealerships.dealership_id
+ORDER BY dealerships.state, dealerships.dealership_id
+) AS result
 ```
 
 ### Screenshot
 
-![Q10 Screenshot](screenshots/q10_salespeople_array_to_json.png)
+![Q10 Screenshot](screenshots/q10_salespeople_array_to_json_2.png)
+![Q10 Screenshot](screenshots/q10_salespeople_array_to_json_1.png)

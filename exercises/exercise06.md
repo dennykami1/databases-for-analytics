@@ -2,7 +2,7 @@
 
 From the Operational Model to the Dimensional Model
 
-- Name:
+- Name: Kami Denny
 - Course: Database for Analytics
 - Module: 6
 
@@ -111,7 +111,7 @@ Save your diagram image in this repo and embed it below.
 
 #### Diagram
 
-![Star Schema Diagram](star-schema.png)
+![Star Schema Diagram](screenshots/module_6_star_diagram.png)
 
 ---
 
@@ -125,4 +125,8 @@ In 1-2 short paragraphs, explain:
 
 #### Design Notes
 
-_Write your design notes here._
+I selected three dimensions: Date, Customer, and Part. These dimensions directly support the analytical requirements of the data warehouse. The Date dimension is necessary because every required question involves filtering or grouping by day, month, quarter, or year. The Customer dimension allows analysis of spending behavior, customer specific totals, and geographic filtering such as ZIP code. The Part dimension supports questions about individual part numbers and product categories such as appliance, which are essential for category level analysis.
+
+The grain of the fact table is daily sales, meaning each row represents the total quantity and total amount sold for a specific customer and part on a specific date. This grain is required because the assignment asks for daily averages and daily totals rather than order level reporting. Storing data at the daily level also ensures that monthly, quarterly, and yearly summaries can be computed accurately without relying on individual order records.
+
+This design supports the required analytics in several ways. Filtering FactDailySales by partKey and dateKey answers the question of how many units of part ax12 were sold on September 2, 1994. Summing the amount for a specific customerKey over a year answers the question of how much customer 124 spent last year. Filtering PartDim by category and DateDim by quarter allows the warehouse to answer how many appliance items were sold during the third quarter of 1994.
